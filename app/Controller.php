@@ -1,15 +1,17 @@
 <?php
 
-require 'View.php';
-require 'Model.php';
+require 'view/View.php';
+
+require 'model/Model.php';
 
 class Controller {
         public $view;
         public $model;
-    function __construct() {
+        function __construct() {
         $this->view = new View;
         $this->model= new Model;
         $this->model->connect();
+       
         
     }
 	public function initPage($_POST,$_GET)
@@ -25,9 +27,12 @@ class Controller {
 
 		}elseif (isset($_GET['view'])) {
 			$message = $this->model->getMessage($_GET['view']);
-                                   $this->view->setWarning(
-                                   $this->view->viewMessage($message));
-                                   $this->view->setTitle($message['name']);
+                        $this->view->setContent($this->view->viewMessage($message));
+                        $this->view->setTitle($message['name']);
+
+		}elseif (isset($_GET['add'])) {
+                        $this->view->setContent($this->view->viewAddMessage());
+                        $this->view->setTitle("Додати повідомлення");
 
 		}elseif (isset($_POST['editmessage'])) {
 			$message = $this->parsePost($_POST);
@@ -40,9 +45,10 @@ class Controller {
 			if($this->model->addMessage($message)){
 			   $this->view->setWarning('Повідомлення додано!');
 			};
-		}
+                }else{
+                    $this->createMainPage();
+                }
 
-		$this->createMainPage();
 		
 	}
 
@@ -75,9 +81,8 @@ class Controller {
 	public function createMainPage()
 	{
 		$mess = $this->model->getAllMessages();
-		foreach ($mess as $value) {
-			$this->view->addMessages($value);
-		}
+                $this->view->setContent($this->view->viewMessages($mess));
+                    
 	}
 
 	/**
@@ -89,14 +94,7 @@ class Controller {
      */	
 	public function viewPage()
 	{
-            $url = $_GET["url"];
-            if($url === "view")
-		$this->view->viewLayout();
-            else if($url === "list")
-                 $this->view->viewList();
-           
-               	
-                else $this->view->viewLayout();
+                 $this->view->viewLayout();
         }      
   
 } // class Controller
