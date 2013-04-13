@@ -10,7 +10,7 @@ class View {
     private $title = "Головна";
     private $warning = "";
     private $content = "";
-
+    
     /**
      * setTitle
      *
@@ -39,6 +39,7 @@ class View {
         $this->content = $c;
     }
 
+
     /**
      * viewLayout
      *
@@ -48,6 +49,22 @@ class View {
      */
     public function viewLayout() {
         include 'tpl/index.tpl';
+    }
+
+    public function viewAddLog(){
+        ob_start();
+        include 'tpl/logM.tpl';
+        $out1 = ob_get_contents();
+        ob_end_clean();
+        return $out1;
+    }
+
+     public function viewRegister(){
+        ob_start();
+        include 'tpl/register.tpl';
+        $out1 = ob_get_contents();
+        ob_end_clean();
+        return $out1;
     }
 
     public function viewAddMessage() {
@@ -82,6 +99,8 @@ class View {
 
         return $out1;
     }
+    
+       
 
     /**
      * addMessages

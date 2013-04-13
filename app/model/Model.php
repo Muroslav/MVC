@@ -14,7 +14,7 @@ class Model {
      */
 	function connect()
 	{
-		$db = mysql_connect('localhost','root','1109546') or die('Немає з\'єднання з БД!!!');
+		$db = mysql_connect('localhost','root','') or die('Немає з\'єднання з БД!!!');
 		mysql_select_db('new_base',$db) or die('Не підключена БД!!!');
 		mysql_query("SET NAMES utf8");
 	}
@@ -37,13 +37,14 @@ class Model {
 							'name'		=> $myrow['name'],
 							'tema'  	=> $myrow['tema'],
 							'text'		=> $myrow['text'],
-							'data'          => $myrow['data'],
+							'data'      => $myrow['data'],
 							'data_reg'	=> $myrow['data_reg']
 						);
                
 		return $message;
 	}
 
+        
 	/**
      * getAllMessages
      *
@@ -86,7 +87,8 @@ class Model {
 		return true;
 	}
 
-	/**
+     
+     /**
      * editMassage
      *
      * Зміннює повідомлення
@@ -100,6 +102,9 @@ class Model {
 		return true;
 	}
 
+        
+            
+        
 	/**
      * delMessage
      *

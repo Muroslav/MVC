@@ -1,41 +1,52 @@
-<?php
-    //  вся процедура работает на сессиях. Именно в ней хранятся данные  пользователя, пока он находится на сайте. Очень важно запустить их в  самом начале странички!!!
-    session_start();
+   <?php
+/**
+ * Main Model
+ *
+ * Клас для роботи з базою даних
+  */
+class Login {
 
-if (isset($_SESSION['login'])) {
-    echo ("Ви ввійшли як ".$_SESSION['login']."");
-       }elseif(!isset($_SESSION['login'])){echo"Зареєструйтесь";}
-   ?> 
-    
+    public function addLog($l) {
 
- <!DOCTYPE html>
-<html>
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title><?php echo $this->title;?></title>
-	<link type="text/css" href="css/style.css" rel="STYLESHEET" />
-</head>
-<body>
-	<div>
-         <div id="add">
-            <a href="/">На головну</a>
-            <a href="?add" >Додати запис</a>
-            <a href="?register">Вхід в систему</a>
-         
-         </div>
-		  <?php echo $this->warning;?>
+    if (isset($_POST['login'])) { $login = $_POST['login']; if ($login == '') { unset($login);} } 
+//заносим введенный пользователем логин в переменную $login, если он пустой, то уничтожаем переменную
+    if (isset($_POST['password'])) { $password=$_POST['password']; if ($password =='') { unset($password);} }
+//заносим введенный пользователем пароль в переменную $password, если он пустой, то уничтожаем переменную
+    if (empty($login) or empty($password)) 
+//если пользователь не ввел логин или пароль, то выдаем ошибку и останавливаем скрипт
+    {
+    exit ("Вы ввели не всю информацию, вернитесь назад и заполните все поля!");
+    }
+//если логин и пароль введены, то обрабатываем их, чтобы теги и скрипты не работали, мало ли что люди могут ввести
+    $login    = stripslashes($login);
+    $login    = htmlspecialchars($login);
+    $password = stripslashes($password);
+    $password = htmlspecialchars($password);
+//удаляем лишние пробелы
+    $login    = trim($login);
+    $password = trim($password);
+// подключаемся к базе
 
-		<div align="center">
-            <?php echo $this->content;?>
-        </div>
-                
-        </div>
+// файл bd.php должен быть в той же папке, что и все остальные, если это не так, то просто измените путь 
+// проверка на существование пользователя с таким же логином
+    $result = mysql_query("SELECT id FROM autholog WHERE login='$login'");
+    $myrow  = mysql_fetch_array($result);
+    if (!empty($myrow['id'])) {
+    exit ("Извините, введённый вами логин уже зарегистрирован. Введите другой логин.");
+    }
+// если такого нет, то сохраняем данные
+    $result2 = mysql_query ("INSERT INTO autholog (login,password) VALUES('$login','$password')");
+// Проверяем, есть ли ошибки
+    if ($result2=='TRUE')
+    {
+    echo "Вы успешно зарегистрированы! Теперь вы можете зайти на сайт. <a href='index.php'>Главная страница</a>";
+    }
+    else {
+    echo "Ошибка! Вы не зарегистрированы.";
+    }
+        }
 
-</body>
-</html>
-
-<?php
-
+public function openLog(){
 
       //  вся процедура работает на сессиях. Именно в ней хранятся данные  пользователя, пока он находится на сайте. Очень важно запустить их в  самом начале странички!!!
     
@@ -46,7 +57,7 @@ if (isset($_SESSION['login'])) {
     //заносим введенный пользователем пароль в переменную $password, если он пустой, то уничтожаем переменную
     if (empty($login) or empty($password)) //если пользователь не ввел логин или пароль, то выдаем ошибку и останавливаем скрипт
     {
-    echo ("Вы ввели не всю информацию, вернитесь назад и заполните все поля!");
+    exit ("Вы ввели не всю информацию, вернитесь назад и заполните все поля!");
     
     }
     //если логин и пароль введены,то обрабатываем их, чтобы теги и скрипты не работали, мало ли что люди могут ввести
@@ -82,3 +93,6 @@ if (isset($_SESSION['login'])) {
     }
     }
 
+}
+
+    } //class Login

@@ -2,7 +2,7 @@
 
     <h2>Змінити запис</h2>
     
-    <form action="/mvc/" method="post">
+    <form action="/" method="post">
         
         <input type="hidden" name="id" value="<?php echo $m['id'];?>" >
         <p>Нова назва(max 10 sumbols):

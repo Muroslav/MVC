@@ -1,6 +1,6 @@
 <div id="style" >
         <h2>Додати запис</h2>
-<form action="/mvc/" method="post" >
+<form action="/" method="post" >
     <p>Назва(max 10 sumbols):
         <input name="title" placeholder="Назва"	type="text" maxlength="10"required>
     </p>
